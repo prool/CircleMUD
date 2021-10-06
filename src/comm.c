@@ -175,6 +175,16 @@ void Free_Invalid_List(void);
 #define FD_CLR(x, y)
 #endif
 
+// prool begin
+// prool here: http://mud.kharkov.org proolix@gmail.com
+int isprool(char c) // prool's modif for isprint
+{
+if ((c<32)&&(c>=0)) return 0;
+if (c==-1) return 0;
+if (c==-3) return 0;
+return 1;
+}
+// prool end
 
 /***********************************************************************
 *  main game loop and related stuff                                    *
@@ -1774,7 +1784,7 @@ int process_input(struct descriptor_data *t)
 	  } else
 	    space_left++;
 	}
-      } else if (isascii(*ptr) && isprint(*ptr)) {
+      } else if (isprool(*ptr)) /*(isascii(*ptr) && isprint(*ptr))*/ { // prool: enable full 8-bit chars
 	if ((*(write_point++) = *ptr) == '$') {		/* copy one character */
 	  *(write_point++) = '$';	/* if it's a $, double it */
 	  space_left -= 2;
