@@ -533,7 +533,9 @@ int get_max_players(void)
     limit.rlim_cur = limit.rlim_max;
     if (setrlimit(RLIMIT_NOFILE, &limit) < 0) {
       perror("SYSERR: calling setrlimit");
+#ifndef DARWIN // by prool. see configure script
       exit(1);
+#endif
     }
 #ifdef RLIM_INFINITY
     if (limit.rlim_max == RLIM_INFINITY)

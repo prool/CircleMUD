@@ -5512,6 +5512,7 @@ rm -f conftest*
 fi
 
 
+
 if eval "test \"`echo '$ac_cv_prototype_'$ac_safe`\" = yes"; then
   echo "$ac_t""yes" 1>&6
 else
@@ -5522,6 +5523,13 @@ EOF
   echo "$ac_t""no" 1>&6
 fi
 
+# by prool:
+if test `uname -s` = "Darwin"
+then
+echo "prool: this OS is Darwin (macOS)"
+CFLAGS="$CFLAGS -DDARWIN"
+#echo $CFLAGS
+fi
 
 trap '' 1 2 15
 cat > confcache <<\EOF
