@@ -8,6 +8,8 @@
 *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
 ************************************************************************ */
 
+//#define PROOLDEBUG // by prool
+
 #define __COMM_C__
 
 #include "conf.h"
@@ -181,6 +183,7 @@ int isprool(char c) // prool's modif for isprint
 {
 if ((c<32)&&(c>=0)) return 0;
 if (c==-1) return 0;
+if (c==-2) return 0;
 if (c==-3) return 0;
 return 1;
 }
@@ -1642,8 +1645,25 @@ ssize_t perform_socket_read(socket_t desc, char *read_point, size_t space_left)
 #endif
 
   /* Read was successful. */
-  if (ret > 0)
+  if (ret > 0) {
+#ifdef PROOLDEBUG // by prool
+	int i;
+	unsigned char *cc;
+    //printf("prooldebug: read %s", read_point);
+	cc=read_point;
+	printf("prool debug read \"");
+	for (i=0;i<ret;i++) {
+	putchar(*cc++);
+	}
+	printf(" ( ");
+	cc=read_point;
+	for (i=0;i<ret;i++) {
+	printf("%02X ", *cc++);
+	}
+	printf(")\n");
+#endif
     return (ret);
+  }
 
   /* read() returned 0, meaning we got an EOF. */
   if (ret == 0) {
