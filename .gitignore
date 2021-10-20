@@ -1,0 +1,8 @@
+config.log
+config.cache
+config.status
+*.o
+bin/*
+src/.accepted
+src/conf.h
+src/util/Makefile
