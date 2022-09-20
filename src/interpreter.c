@@ -40,6 +40,7 @@ extern int top_of_p_table;
 extern int circle_restrict;
 extern int no_specials;
 extern int max_bad_pws;
+extern const char *ctypes[]; // by prool
 
 /* external functions */
 void echo_on(struct descriptor_data *d);
@@ -1571,6 +1572,13 @@ void nanny(struct descriptor_data *d, char *arg)
 	load_room = r_frozen_start_room;
 
       send_to_char(d->character, "%s", WELC_MESSG);
+      /* prool: set color full */
+  	REMOVE_BIT(PRF_FLAGS(d->character), PRF_COLOR_1 | PRF_COLOR_2);
+  	SET_BIT(PRF_FLAGS(d->character), (PRF_COLOR_1 * (3/*tp*/ & 1)) | (PRF_COLOR_2 * (3/*tp*/ & 2) >> 1));
+
+  	send_to_char(d->character, "Your %scolor%s is now %s.\r\n",
+	CCRED(d->character, C_SPR), CCNRM(d->character, C_OFF), ctypes[3/*tp*/]);
+
       d->character->next = character_list;
       character_list = d->character;
       char_to_room(d->character, load_room);
