@@ -1,0 +1,28 @@
+			Compiling CircleMUD on Android
+              Written by Serge "Prool" Pustovoitoff <proolix@gmail.com>
+
+Compile under Android 6.0/termux (dirty instruction)
+----------------------------------------------------
+
+./configure
+
+cd src
+
+add flag '-DANDROID' to Makefile to end of line 'CFLAGS=...'
+
+make
+
+cd ..
+
+bin/circle
+
+Prool Contacts
+--------------
+
+http://prool.kharkov.org
+
+http://mud.kharkov.org
+
+proolix dog gmail.com
+
+Prool

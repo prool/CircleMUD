@@ -94,6 +94,7 @@ doc/README.ARC   - If you are using an Acorn running RiscOS.
 
 doc/README.VMS   - If you happen to be on OpenVMS.
 
+doc/README.prool - instructions from mr.Prool for Android OS
 
 If you are interested in porting CircleMUD to a new platform, see the
 file doc/porting.txt for some tips.
