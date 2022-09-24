@@ -2111,7 +2111,9 @@ RETSIGTYPE reap(int sig)
 {
   while (waitpid(-1, NULL, WNOHANG) > 0);
 
+#ifndef ANDROID
   my_signal(SIGCHLD, reap);
+#endif
 }
 
 /* Dying anyway... */
@@ -2177,6 +2179,7 @@ void signal_setup(void)
   struct itimerval itime;
   struct timeval interval;
 
+#ifndef ANDROID
   /* user signal 1: reread wizlists.  Used by autowiz system. */
   my_signal(SIGUSR1, reread_wizlists);
 
@@ -2185,6 +2188,7 @@ void signal_setup(void)
    * yourself out of the MUD somehow.  (Duh...)
    */
   my_signal(SIGUSR2, unrestrict_game);
+#endif
 
   /*
    * set up the deadlock-protection so that the MUD aborts itself if it gets
@@ -2195,8 +2199,9 @@ void signal_setup(void)
   itime.it_interval = interval;
   itime.it_value = interval;
   setitimer(ITIMER_VIRTUAL, &itime, NULL);
+#ifndef ANDROID
   my_signal(SIGVTALRM, checkpointing);
-
+#endif
   /* just to be on the safe side: */
   my_signal(SIGHUP, hupsig);
   my_signal(SIGCHLD, reap);
