@@ -245,29 +245,29 @@ ACMD(do_reboot)
 
 void boot_world(void)
 {
-  log("Loading zone table.");
+  //log("Loading zone table.");
   index_boot(DB_BOOT_ZON);
 
-  log("Loading rooms.");
+  //log("Loading rooms.");
   index_boot(DB_BOOT_WLD);
 
-  log("Renumbering rooms.");
+  //log("Renumbering rooms.");
   renum_world();
 
-  log("Checking start rooms.");
+  //log("Checking start rooms.");
   check_start_rooms();
 
-  log("Loading mobs and generating index.");
+  //log("Loading mobs and generating index.");
   index_boot(DB_BOOT_MOB);
 
-  log("Loading objs and generating index.");
+  //log("Loading objs and generating index.");
   index_boot(DB_BOOT_OBJ);
 
-  log("Renumbering zone table.");
+  //log("Renumbering zone table.");
   renum_zone_table();
 
   if (!no_specials) {
-    log("Loading shops.");
+    //log("Loading shops.");
     index_boot(DB_BOOT_SHP);
   }
 }
@@ -382,7 +382,7 @@ void boot_db(void)
 {
   zone_rnum i;
 
-  log("Boot db -- BEGIN.");
+  //log("Boot db -- BEGIN."); // prool
 
   log("Resetting the game time:");
   reset_time();
@@ -402,44 +402,44 @@ void boot_db(void)
   if (file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0)
     prune_crlf(GREETINGS);
 
-  log("Loading spell definitions.");
+  //log("Loading spell definitions.");
   mag_assign_spells();
 
   boot_world();
 
-  log("Loading help entries.");
+  //log("Loading help entries.");
   index_boot(DB_BOOT_HLP);
 
-  log("Generating player index.");
+  //log("Generating player index.");
   build_player_index();
 
-  log("Loading fight messages.");
+  //log("Loading fight messages.");
   load_messages();
 
-  log("Loading social messages.");
+  //log("Loading social messages.");
   boot_social_messages();
 
-  log("Assigning function pointers:");
+  //log("Assigning function pointers:");
 
   if (!no_specials) {
-    log("   Mobiles.");
+    //log("   Mobiles.");
     assign_mobiles();
-    log("   Shopkeepers.");
+    //log("   Shopkeepers.");
     assign_the_shopkeepers();
-    log("   Objects.");
+    //log("   Objects.");
     assign_objects();
-    log("   Rooms.");
+    //log("   Rooms.");
     assign_rooms();
   }
 
-  log("Assigning spell and skill levels.");
+  //log("Assigning spell and skill levels.");
   init_spell_levels();
 
-  log("Sorting command list and spells.");
+  //log("Sorting command list and spells.");
   sort_commands();
   sort_spells();
 
-  log("Booting mail system.");
+  //log("Booting mail system."); // prool
   if (!scan_file()) {
     log("    Mail boot failed -- Mail system disabled");
     no_mail = 1;
@@ -451,18 +451,18 @@ void boot_db(void)
   if (!no_rent_check) {
     log("Deleting timed-out crash and rent files:");
     update_obj_file();
-    log("   Done.");
+    //log("   Done."); // prool
   }
 
   /* Moved here so the object limit code works. -gg 6/24/98 */
   if (!mini_mud) {
-    log("Booting houses.");
+    //log("Booting houses."); // prool
     House_boot();
   }
 
   for (i = 0; i <= top_of_zone_table; i++) {
-    log("Resetting #%d: %s (rooms %d-%d).", zone_table[i].number,
-	zone_table[i].name, zone_table[i].bot, zone_table[i].top);
+    /*log("Resetting #%d: %s (rooms %d-%d).", zone_table[i].number,
+	zone_table[i].name, zone_table[i].bot, zone_table[i].top);*/ /* by prool */
     reset_zone(i);
   }
 
@@ -470,7 +470,7 @@ void boot_db(void)
 
   boot_time = time(0);
 
-  log("Boot db -- DONE.");
+  //log("Boot db -- DONE."); // prool
 }
 
 

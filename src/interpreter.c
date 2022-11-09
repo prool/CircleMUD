@@ -186,6 +186,8 @@ ACMD(do_wizutil);
 ACMD(do_write);
 ACMD(do_zreset);
 
+ACMD(do_prool); // prool
+
 
 /* This is the Master Command List(tm).
 
@@ -396,6 +398,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "pour"     , POS_STANDING, do_pour     , 0, SCMD_POUR },
   { "pout"     , POS_RESTING , do_action   , 0, 0 },
   { "prompt"   , POS_DEAD    , do_display  , 0, 0 },
+  { "prool"    , POS_DEAD    , do_prool    , 0, 0 }, // prool
   { "practice" , POS_RESTING , do_practice , 1, 0 },
   { "pray"     , POS_SITTING , do_action   , 0, 0 },
   { "puke"     , POS_RESTING , do_action   , 0, 0 },
@@ -1705,4 +1708,14 @@ void nanny(struct descriptor_data *d, char *arg)
     STATE(d) = CON_DISCONNECT;	/* Safest to do. */
     break;
   }
+}
+
+// begin prool code:
+
+ACMD(do_prool)
+{
+int i;
+send_to_char(ch,"prool test command:\r\n");
+for (i=0;i<=255;i++) send_to_char(ch, "\x1B[38;5;%im color%i ",i,i);
+send_to_char(ch,"\r\n");
 }

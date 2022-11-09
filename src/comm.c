@@ -376,14 +376,14 @@ void init_game(ush_int port)
   boot_db();
 
 #if defined(CIRCLE_UNIX) || defined(CIRCLE_MACINTOSH)
-  log("Signal trapping.");
+  //log("Signal trapping."); // prool
   signal_setup();
 #endif
 
   /* If we made it this far, we will be able to restart without problem. */
   remove(KILLSCRIPT_FILE);
 
-  log("Entering game loop.");
+  log("CircleMUD: Entering game loop.");
 
   game_loop(mother_desc);
 
@@ -624,7 +624,7 @@ void game_loop(socket_t mother_desc)
 
     /* Sleep if we don't have any connections */
     if (descriptor_list == NULL) {
-      log("No connections.  Going to sleep.");
+      //log("No connections.  Going to sleep."); // prool
       FD_ZERO(&input_set);
       FD_SET(mother_desc, &input_set);
       if (select(mother_desc + 1, &input_set, (fd_set *) 0, (fd_set *) 0, NULL) < 0) {
@@ -633,7 +633,7 @@ void game_loop(socket_t mother_desc)
 	else
 	  perror("SYSERR: Select coma");
       } else
-	log("New connection.  Waking up.");
+	/*log("New connection.  Waking up.")*/;
       gettimeofday(&last_time, (struct timezone *) 0);
     }
     /* Set up the input, output, and exception sets for select(). */
@@ -1338,9 +1338,11 @@ int new_descriptor(socket_t s)
   if (nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
 				      sizeof(peer.sin_addr), AF_INET))) {
 
+#if 0 // prool
     /* resolution failed */
     if (!nameserver_is_slow)
       perror("SYSERR: gethostbyaddr");
+#endif
 
     /* find the numeric site address */
     strncpy(newd->host, (char *)inet_ntoa(peer.sin_addr), HOST_LENGTH);	/* strncpy: OK (n->host:HOST_LENGTH+1) */
@@ -1667,7 +1669,7 @@ ssize_t perform_socket_read(socket_t desc, char *read_point, size_t space_left)
 
   /* read() returned 0, meaning we got an EOF. */
   if (ret == 0) {
-    log("WARNING: EOF on socket read (connection broken by peer)");
+    //log("WARNING: EOF on socket read (connection broken by peer)");
     return (-1);
   }
 
@@ -1976,7 +1978,7 @@ void close_socket(struct descriptor_data *d)
       free_char(d->character);
     }
   } else
-    mudlog(CMP, LVL_IMMORT, TRUE, "Losing descriptor without char.");
+    /*mudlog(CMP, LVL_IMMORT, TRUE, "Losing descriptor without char.")*/; // prool
 
   /* JE 2/22/95 -- part of my unending quest to make switch stable */
   if (d->original && d->original->desc)
