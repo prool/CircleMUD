@@ -186,6 +186,7 @@ ACMD(do_wizutil);
 ACMD(do_write);
 ACMD(do_zreset);
 
+ACMD(do_prool0); // prool
 ACMD(do_prool); // prool
 
 
@@ -399,6 +400,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "pout"     , POS_RESTING , do_action   , 0, 0 },
   { "prompt"   , POS_DEAD    , do_display  , 0, 0 },
   { "prool"    , POS_DEAD    , do_prool    , 0, 0 }, // prool
+  { "prool0"   , POS_DEAD    , do_prool0   , 0, 0 }, // prool
   { "practice" , POS_RESTING , do_practice , 1, 0 },
   { "pray"     , POS_SITTING , do_action   , 0, 0 },
   { "puke"     , POS_RESTING , do_action   , 0, 0 },
@@ -1716,6 +1718,20 @@ ACMD(do_prool)
 {
 int i;
 send_to_char(ch,"prool test command:\r\n");
-for (i=0;i<=255;i++) send_to_char(ch, "\x1B[38;5;%im color%i ",i,i);
+for (i=0;i<=255;i++) {
+	if ((i%8)==0) send_to_char(ch, "\r\n");
+	send_to_char(ch, "\x1B[38;5;%im color%i ",i,i);
+	}
+send_to_char(ch,"\r\n");
+}
+
+ACMD(do_prool0)
+{
+int i;
+send_to_char(ch,"prool test command:\r\n");
+for (i=0;i<=255;i++) {
+	//if ((i%8)==0) send_to_char(ch, "\r\n");
+	send_to_char(ch, "\x1B[38;5;%im color%i ",i,i);
+	}
 send_to_char(ch,"\r\n");
 }
