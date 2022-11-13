@@ -23,6 +23,7 @@
 #include "mail.h"
 #include "screen.h"
 
+#define BUFLEN 512 // prool's buffer length
 
 /* external variables */
 extern room_rnum r_mortal_start_room;
@@ -186,8 +187,11 @@ ACMD(do_wizutil);
 ACMD(do_write);
 ACMD(do_zreset);
 
-ACMD(do_prool0); // prool
-ACMD(do_prool); // prool
+// begin prool commands
+ACMD(do_prool0);
+ACMD(do_prool);
+ACMD(do_prool_rgb);
+// end prool commands
 
 
 /* This is the Master Command List(tm).
@@ -401,6 +405,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "prompt"   , POS_DEAD    , do_display  , 0, 0 },
   { "prool"    , POS_DEAD    , do_prool    , 0, 0 }, // prool
   { "prool0"   , POS_DEAD    , do_prool0   , 0, 0 }, // prool
+  { "proolrgb" , POS_DEAD    , do_prool_rgb, 0, 0 }, // prool
   { "practice" , POS_RESTING , do_practice , 1, 0 },
   { "pray"     , POS_SITTING , do_action   , 0, 0 },
   { "puke"     , POS_RESTING , do_action   , 0, 0 },
@@ -1717,7 +1722,7 @@ void nanny(struct descriptor_data *d, char *arg)
 ACMD(do_prool)
 {
 int i;
-send_to_char(ch,"prool test command:\r\n");
+send_to_char(ch,"prool 256 color test command:\r\n");
 for (i=0;i<=255;i++) {
 	if ((i%8)==0) send_to_char(ch, "\r\n");
 	send_to_char(ch, "\x1B[38;5;%im color%i ",i,i);
@@ -1728,10 +1733,31 @@ send_to_char(ch,"\r\n");
 ACMD(do_prool0)
 {
 int i;
-send_to_char(ch,"prool test command:\r\n");
+send_to_char(ch,"prool test command with long sting \r\n");
 for (i=0;i<=255;i++) {
 	//if ((i%8)==0) send_to_char(ch, "\r\n");
 	send_to_char(ch, "\x1B[38;5;%im color%i ",i,i);
 	}
 send_to_char(ch,"\r\n");
+}
+
+ACMD(do_prool_rgb)
+{int r, g, b;
+char buf[BUFLEN];
+
+r=0; g=0; b=0;
+buf[0]=0;
+
+if (argument[0]==0) {
+	send_to_char(ch,"Usage: proolrgb <r> <g> <b>\r\nwhere <r>,<g>,<b> is numbers [0..255]\r\n");
+	return;
+}
+
+sscanf(argument,"%i %i %i", &r, &g, &b);
+printf("r=%i g=%i b=%i\n", r, g, b);
+// ESC[38;2;r;g;b m Select RGB foreground color
+sprintf(buf,"\x1B[38;2;%i;%i;%im r=%i g=%i b=%i\r\n", r, g, b, r, g, b);
+printf("%s",buf);
+send_to_char(ch,buf);
+send_to_char(ch,"\x1B[38;2;255;255;255m");
 }
